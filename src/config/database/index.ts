@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
-import { HOST, PORT, DB, USER, PASSWORD } from "../../constant";
+import { MONGO_CONNECTION_TYPE, MONGO_DATABASE, MONGO_HOST, MONGO_PASSWORD, MONGO_PORT, MONGO_USER } from "../../constant";
 
 const initializeDatabase = () =>
   new Promise(async (resolve, reject) => {
     try {
-      const db = await mongoose.connect(`mongodb://${HOST}:${PORT}/${DB}`, {
+      const db = await mongoose.connect(MONGO_CONNECTION_TYPE === "ATLAS" ? `mongodb+srv://${MONGO_HOST}/${MONGO_DATABASE}` : `mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}`, {
         auth: {
-          username: USER,
-          password: PASSWORD,
+          username: MONGO_USER,
+          password: MONGO_PASSWORD,
         },
       });
 
