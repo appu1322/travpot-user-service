@@ -1,4 +1,4 @@
-import { USER } from "../../models";
+import { USER } from '../../models';
 
 const addUser = (data: object) => USER.create(data);
 
@@ -26,7 +26,7 @@ const getUsers = async (search = {}, projection: object = { __v: 0 }) =>
 const getUsersWithPagination = async (
   search = {},
   projection: object = { __v: 0 },
-  optional: { skip: number; limit: number },
+  optional: { skip: number; limit: number }
 ) => {
   const pipeline = [{ $match: search }];
   return USER.aggregate([
@@ -41,11 +41,11 @@ const getUsersWithPagination = async (
             $project: projection,
           },
         ],
-        total: [...pipeline, { $count: "count" }],
+        total: [...pipeline, { $count: 'count' }],
       },
     },
     {
-      $unwind: { path: "$total", preserveNullAndEmptyArrays: true },
+      $unwind: { path: '$total', preserveNullAndEmptyArrays: true },
     },
   ]).then((result) => result[0] || null);
 };

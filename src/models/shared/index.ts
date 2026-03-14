@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema } from 'mongoose';
 
 export const addressSchema = new Schema(
   {
@@ -22,9 +22,9 @@ export const addressSchema = new Schema(
     geo: {
       type: {
         type: String,
-        enum: ["Point"],
+        enum: ['Point'],
         required: true,
-        default: "Point",
+        default: 'Point',
       },
       coordinates: {
         type: [Number], // [longitude, latitude]
@@ -33,10 +33,10 @@ export const addressSchema = new Schema(
       },
     },
   },
-  { _id: false },
+  { _id: false }
 );
 
-addressSchema.index({ geo: "2dsphere" });
+addressSchema.index({ geo: '2dsphere' });
 
 export const phoneSchema = new Schema(
   {
@@ -52,7 +52,7 @@ export const phoneSchema = new Schema(
     },
     number: String,
   },
-  { _id: false },
+  { _id: false }
 );
 
 export const mediaSchema = new Schema(
@@ -63,5 +63,5 @@ export const mediaSchema = new Schema(
     type: String,
     size: Number,
   },
-  { _id: false },
+  { _id: false }
 );

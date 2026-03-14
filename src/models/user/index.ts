@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import { AUTH_PROVIDER, GENDER, LANGUAGE, STATUS } from "../../constant";
-import { mediaSchema, phoneSchema } from "../shared";
+import mongoose from 'mongoose';
+import { AUTH_PROVIDER, GENDER, LANGUAGE, STATUS } from '../../constant';
+import { mediaSchema, phoneSchema } from '../shared';
 
 const schema = new mongoose.Schema(
   {
@@ -67,10 +67,10 @@ const schema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 type IUser = mongoose.InferSchemaType<typeof schema>;
 
-const USER = mongoose.model("user", schema);
+const USER = mongoose.model('user', schema);
 export { IUser, USER };

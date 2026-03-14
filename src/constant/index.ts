@@ -10,25 +10,25 @@ const MONGO_USER = String(process.env.MONGO_USER);
 const MONGO_PASSWORD = String(process.env.MONGO_PASSWORD);
 
 const STATUS = {
-  active: "ACTIVE",
-  inactive: "INACTIVE",
-  deleted: "DELETED",
+  active: 'ACTIVE',
+  inactive: 'INACTIVE',
+  deleted: 'DELETED',
 };
 const AUTH_PROVIDER = {
-  email: "EMAIL",
-  google: "GOOGLE",
-  facebook: "FACEBOOK",
-  apple: "APPLE",
+  email: 'EMAIL',
+  google: 'GOOGLE',
+  facebook: 'FACEBOOK',
+  apple: 'APPLE',
 };
 const LANGUAGE = {
-  en: "en",
-  hi: "hi",
-  gu: "gu",
+  en: 'en',
+  hi: 'hi',
+  gu: 'gu',
 };
 const GENDER = {
-  male: "MALE",
-  female: "FEMALE",
-  other: "OTHER",
+  male: 'MALE',
+  female: 'FEMALE',
+  other: 'OTHER',
 };
 
 export {
@@ -42,7 +42,6 @@ export {
   MONGO_PASSWORD,
   MONGO_PORT,
   MONGO_USER,
-
   STATUS,
   AUTH_PROVIDER,
   LANGUAGE,

@@ -1,5 +1,5 @@
 const authHandler = () => {
-  console.log("wokring");
+  console.log('wokring');
 };
 
 export const authAdminController = {

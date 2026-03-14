@@ -1,4 +1,4 @@
-import en from "./en.json";
+import en from './en.json';
 
 export const LOCALIZATION = {
   en,
