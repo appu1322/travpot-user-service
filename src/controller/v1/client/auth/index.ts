@@ -4,6 +4,11 @@ const snedOtpHandler = (req: IRequest, res: IResponse) => {
   makeResponse(req, res, 200, true, 'fetch');
 };
 
+const verifyOtpHandler = (req: IRequest, res: IResponse) => {
+  makeResponse(req, res, 200, true, 'fetch');
+};
+
 export const authController = {
   snedOtpHandler,
+  verifyOtpHandler
 };

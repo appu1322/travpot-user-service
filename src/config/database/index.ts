@@ -30,4 +30,4 @@ const initializeDatabase = () =>
     }
   });
 
-export default initializeDatabase;
+export {initializeDatabase};

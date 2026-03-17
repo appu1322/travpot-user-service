@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import initializeDatabase from './config/database';
-import { initializeApp } from './config';
+import { initializeDatabase, initializeApp } from './config';
 
 process.on('uncaughtException', (err) => {
   console.log(' UNCAUGHT EXCEPTION ');
