@@ -38,11 +38,10 @@ const sendFriendRequestHandler = async (req: IRequest, res: IResponse) => {
   makeResponse(req, res, 201, true, 'friend_request_sent');
 };
 
-// PATCH /friend/:requestId  body: { status: 'ACCEPTED' | 'REJECTED' }
 const updateFriendRequestHandler = async (req: IRequest, res: IResponse) => {
   const _recipient = req.user!._id;
-  const _id = new mongoose.Types.ObjectId(req.query.requestId as string);
-  const { status } = req.body;
+  const { requestId, status } = req.body;
+  const _id = new mongoose.Types.ObjectId(requestId);
 
   const request = await updateFriend(
     { _id, _recipient, status: FRIEND_STATUS.pending },
@@ -63,7 +62,6 @@ const updateFriendRequestHandler = async (req: IRequest, res: IResponse) => {
   );
 };
 
-// GET /friend/list?status=ACCEPTED|PENDING
 const friendListHandler = async (req: IRequest, res: IResponse) => {
   const _user = req.user!._id;
   const status = (req.query.status as string) || FRIEND_STATUS.accepted;
