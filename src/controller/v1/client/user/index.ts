@@ -6,7 +6,7 @@ import { getUser, updateUser } from '../../../../services/user';
 import { comparePassword, hashPassword, wrapController } from '../../../../utils/helper';
 
 const logoutHandler = async (req: IRequest, res: IResponse) => {
-  const { all } = req.body;
+  const { all } = req.query;
   const _user = req.user!._id;
 
   if (all) {
