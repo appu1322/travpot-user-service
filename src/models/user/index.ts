@@ -70,7 +70,7 @@ const schema = new mongoose.Schema(
   }
 );
 
-type IUser = mongoose.InferSchemaType<typeof schema>;
+type IUser = mongoose.InferSchemaType<typeof schema> & { _id: mongoose.Types.ObjectId };
 
 const USER = mongoose.model('user', schema);
 export { IUser, USER };
