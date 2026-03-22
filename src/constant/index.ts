@@ -57,6 +57,11 @@ const SESSION_STATUS = {
   active: 'ACTIVE',
   revoked: 'REVOKED',
 };
+const FRIEND_STATUS = {
+  pending: 'PENDING',
+  accepted: 'ACCEPTED',
+  rejected: 'REJECTED',
+};
 
 export {
   HOST,
@@ -78,6 +83,7 @@ export {
   OTP_STATUS,
   OTP_FOR,
   SESSION_STATUS,
+  FRIEND_STATUS,
   JWT_ACCESS_SECRET,
   JWT_REFRESH_SECRET,
   JWT_ACCESS_EXPIRY,

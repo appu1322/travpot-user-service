@@ -20,5 +20,10 @@
   "blocked_or_removed": "You have been removed or blocked by Admin",
   "route_not_found": "the resource you are looking for is not found",
   "mobile_exit": "Mobile number already exits",
-  "email_exit": "Email already exits"
+  "email_exit": "Email already exits",
+  "friend_request_sent": "Friend request sent successfully",
+  "friend_request_accepted": "Friend request accepted",
+  "friend_request_rejected": "Friend request rejected",
+  "friend_request_exit": "Friend request already exists",
+  "cannot_add_self": "You cannot send a friend request to yourself"
 }
