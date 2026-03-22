@@ -3,13 +3,9 @@ import { SESSION_STATUS } from '../../constant';
 
 const schema = new Schema(
   {
-    userId: {
+    _user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
-      required: true,
-    },
-    refreshToken: {
-      type: String,
       required: true,
     },
     userAgent: {
@@ -31,4 +27,8 @@ const schema = new Schema(
   { timestamps: true }
 );
 
-export const SESSION = model('session', schema);
+type ISession = mongoose.InferSchemaType<typeof schema> & { _id: mongoose.Types.ObjectId };
+
+const SESSION = model('session', schema);
+
+export { ISession, SESSION };

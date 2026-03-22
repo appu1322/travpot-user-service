@@ -6,16 +6,16 @@ import { getUser, updateUser } from '../../../../services/user';
 import { comparePassword, hashPassword, wrapController } from '../../../../utils/helper';
 
 const logoutHandler = async (req: IRequest, res: IResponse) => {
-  const { refreshToken } = req.body;
-  const userId = req.user!._id;
+  const { all } = req.body;
+  const _user = req.user!._id;
 
-  if (refreshToken) {
+  if (all) {
+    await deleteSessions({ _user });
+  } else {
     await updateSession(
-      { userId, refreshToken, status: SESSION_STATUS.active },
+      { _id: req.session!._id, status: SESSION_STATUS.active },
       { status: SESSION_STATUS.revoked }
     );
-  } else {
-    await deleteSessions({ userId });
   }
 
   makeResponse(req, res, 200, true, 'logout');

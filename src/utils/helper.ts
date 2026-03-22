@@ -29,7 +29,10 @@ const comparePassword = (password: string, hash: string): Promise<boolean> => {
   return bcrypt.compare(password, hash);
 };
 
-const generateTokens = (payload: object): { accessToken: string; refreshToken: string } => {
+const generateTokens = (payload: {
+  _id: unknown;
+  _session: unknown;
+}): { accessToken: string; refreshToken: string } => {
   const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET, {
     expiresIn: JWT_ACCESS_EXPIRY,
   } as jwt.SignOptions);

@@ -116,15 +116,14 @@ const signupHandler = async (req: IRequest, res: IResponse) => {
     gender,
   });
 
-  const tokens = generateTokens({ _id: user._id });
-
-  await createSession({
-    userId: user._id,
-    refreshToken: tokens.refreshToken,
+  const session = await createSession({
+    _user: user._id,
     userAgent: req.headers['user-agent'],
     ip: req.ip,
     expiresAt: getSessionExpiry(),
   });
+
+  const tokens = generateTokens({ _id: user._id, _session: session._id });
 
   makeResponse(req, res, 201, true, 'create', {
     _id: user._id,
@@ -160,15 +159,14 @@ const loginHandler = async (req: IRequest, res: IResponse) => {
     return;
   }
 
-  const tokens = generateTokens({ _id: user._id });
-
-  await createSession({
-    userId: user._id,
-    refreshToken: tokens.refreshToken,
+  const session = await createSession({
+    _user: user._id,
     userAgent: req.headers['user-agent'],
     ip: req.ip,
     expiresAt: getSessionExpiry(),
   });
+
+  const tokens = generateTokens({ _id: user._id, _session: session._id });
 
   makeResponse(req, res, 200, true, 'login', { ...user, ...tokens, password: undefined });
 };
@@ -216,8 +214,7 @@ const refreshTokenHandler = async (req: IRequest, res: IResponse) => {
   const decoded = verifyRefreshToken(refreshToken);
 
   const session = await getSession({
-    refreshToken,
-    userId: new mongoose.Types.ObjectId(decoded._id),
+    _id: new mongoose.Types.ObjectId(decoded._session),
     status: SESSION_STATUS.active,
   });
 
@@ -237,12 +234,9 @@ const refreshTokenHandler = async (req: IRequest, res: IResponse) => {
     return;
   }
 
-  const tokens = generateTokens({ _id: user._id });
+  await updateSession({ _id: session._id }, { expiresAt: getSessionExpiry() });
 
-  await updateSession(
-    { _id: session._id },
-    { refreshToken: tokens.refreshToken, expiresAt: getSessionExpiry() }
-  );
+  const tokens = generateTokens({ _id: user._id, _session: session._id });
 
   makeResponse(req, res, 200, true, 'fetch', tokens);
 };
