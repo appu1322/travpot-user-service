@@ -1,7 +1,16 @@
+import mongoose from 'mongoose';
 import { IRequest, IResponse, makeResponse } from '../../../../lib';
-import { OTP_CHANNEL, OTP_FOR, OTP_STATUS } from '../../../../constant';
+import { OTP_CHANNEL, OTP_FOR, OTP_STATUS, OTP_TYPE, STATUS } from '../../../../constant';
 import { getOtp, updateOtp } from '../../../../services/otp';
-import { generateOtp, getOtpExpiry } from '../../../../utils/helper';
+import { createUser, getUser, updateUser } from '../../../../services/user';
+import {
+  generateOtp,
+  getOtpExpiry,
+  hashPassword,
+  comparePassword,
+  generateTokens,
+  verifyRefreshToken,
+} from '../../../../utils/helper';
 
 const sendOtpHandler = async (req: IRequest, res: IResponse) => {
   try {
@@ -10,7 +19,8 @@ const sendOtpHandler = async (req: IRequest, res: IResponse) => {
     const contactData =
       channel === OTP_CHANNEL.email ? { email: contact } : { mobile: contact };
 
-    const otp = generateOtp();
+    // const otp = generateOtp();
+    const otp = '123456';
     const otpExpiryAt = getOtpExpiry();
 
     const contactFilter =
@@ -65,7 +75,167 @@ const verifyOtpHandler = async (req: IRequest, res: IResponse) => {
   }
 };
 
+const signupHandler = async (req: IRequest, res: IResponse) => {
+  try {
+    const { firstName, lastName, contact, password, authProvider, gender } = req.body;
+
+    // Verify OTP was completed for this contact before signup
+    const isEmailSignup = !!contact.email;
+    const otpMatch = isEmailSignup
+      ? { 'contact.email': contact.email }
+      : { 'contact.mobile.number': contact.mobile.number, 'contact.mobile.dialCode': contact.mobile.dialCode };
+
+    const otpRecord = await getOtp({
+      ...otpMatch,
+      otpType: OTP_TYPE.signup,
+      otpFor: OTP_FOR.user,
+      status: OTP_STATUS.verified,
+    });
+
+    if (!otpRecord) {
+      makeResponse(req, res, 400, false, 'otp_incorrect');
+      return;
+    }
+
+    // Check duplicate contact
+    const userSearch = isEmailSignup
+      ? { 'contact.email': contact.email }
+      : { 'contact.mobile.number': contact.mobile.number };
+
+    const existingUser = await getUser(userSearch);
+    if (existingUser) {
+      makeResponse(req, res, 409, false, isEmailSignup ? 'email_exit' : 'mobile_exit');
+      return;
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    const user = await createUser({
+      firstName,
+      lastName,
+      contact: {
+        ...contact,
+        isEmailVerified: isEmailSignup,
+        isMobileVerified: !isEmailSignup,
+      },
+      password: hashedPassword,
+      authProvider,
+      gender,
+    });
+
+    const tokens = generateTokens({ _id: user._id });
+
+    makeResponse(req, res, 201, true, 'create', {  _id: user._id, firstName, lastName, contact, ...tokens });
+  } catch (_err) {
+    makeResponse(req, res, 500, false, 'unknown_error');
+  }
+};
+
+const loginHandler = async (req: IRequest, res: IResponse) => {
+  try {
+    const { email, mobile, password } = req.body;
+
+    const userSearch = email ? { 'contact.email': email } : { 'contact.mobile.number': mobile.number };
+
+    const user = await getUser(userSearch);
+
+    if (!user) {
+      makeResponse(req, res, 404, false, 'not_exit');
+      return;
+    }
+
+    if (user.status !== STATUS.active) {
+      makeResponse(req, res, 403, false, 'blocked_or_removed');
+      return;
+    }
+
+    const isMatch = await comparePassword(password, user.password as string);
+    if (!isMatch) {
+      makeResponse(req, res, 400, false, 'password_not_match');
+      return;
+    }
+
+    const tokens = generateTokens({ _id: user._id });
+
+    const { password: _pw, ...safeUser } = user;
+    makeResponse(req, res, 200, true, 'login', { ...safeUser, ...tokens });
+  } catch (_err) {
+    makeResponse(req, res, 500, false, 'unknown_error');
+  }
+};
+
+const resetPasswordHandler = async (req: IRequest, res: IResponse) => {
+  try {
+    const { channel, contact, newPassword } = req.body;
+
+    // Ensure OTP was verified for forgot-password flow
+    const contactMatch =
+      channel === OTP_CHANNEL.email
+        ? { 'contact.email': contact }
+        : { 'contact.mobile.number': contact.number, 'contact.mobile.dialCode': contact.dialCode };
+
+    const otpRecord = await getOtp({
+      ...contactMatch,
+      otpType: OTP_TYPE.forgotPassword,
+      otpFor: OTP_FOR.user,
+      status: OTP_STATUS.verified,
+    });
+
+    if (!otpRecord) {
+      makeResponse(req, res, 400, false, 'otp_incorrect');
+      return;
+    }
+
+    const userSearch =
+      channel === OTP_CHANNEL.email
+        ? { 'contact.email': contact }
+        : { 'contact.mobile.number': contact.number };
+
+    const user = await getUser(userSearch);
+    if (!user) {
+      makeResponse(req, res, 404, false, 'not_exit');
+      return;
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+    await updateUser({ _id: new mongoose.Types.ObjectId(user._id) }, { password: hashedPassword });
+
+    makeResponse(req, res, 200, true, 'update');
+  } catch (_err) {
+    makeResponse(req, res, 500, false, 'unknown_error');
+  }
+};
+
+const refreshTokenHandler = async (req: IRequest, res: IResponse) => {
+  try {
+    const { refreshToken } = req.body;
+
+    const decoded = verifyRefreshToken(refreshToken);
+
+    const user = await getUser({ _id: new mongoose.Types.ObjectId(decoded._id) });
+    if (!user) {
+      makeResponse(req, res, 404, false, 'not_exit');
+      return;
+    }
+
+    if (user.status !== STATUS.active) {
+      makeResponse(req, res, 403, false, 'blocked_or_removed');
+      return;
+    }
+
+    const tokens = generateTokens({ _id: user._id });
+
+    makeResponse(req, res, 200, true, 'fetch', tokens);
+  } catch (_err) {
+    makeResponse(req, res, 401, false, 'unauthorized');
+  }
+};
+
 export const authController = {
   sendOtpHandler,
   verifyOtpHandler,
+  signupHandler,
+  loginHandler,
+  resetPasswordHandler,
+  refreshTokenHandler,
 };

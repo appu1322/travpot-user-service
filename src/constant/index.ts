@@ -9,6 +9,12 @@ const MONGO_DATABASE = String(process.env.MONGO_DATABASE);
 const MONGO_USER = String(process.env.MONGO_USER);
 const MONGO_PASSWORD = String(process.env.MONGO_PASSWORD);
 
+// JWT Config
+const JWT_ACCESS_SECRET = String(process.env.JWT_ACCESS_SECRET || 'access_secret');
+const JWT_REFRESH_SECRET = String(process.env.JWT_REFRESH_SECRET || 'refresh_secret');
+const JWT_ACCESS_EXPIRY = '15m';
+const JWT_REFRESH_EXPIRY = '7d';
+
 const STATUS = {
   active: 'ACTIVE',
   inactive: 'INACTIVE',
@@ -68,4 +74,8 @@ export {
   OTP_CHANNEL,
   OTP_STATUS,
   OTP_FOR,
+  JWT_ACCESS_SECRET,
+  JWT_REFRESH_SECRET,
+  JWT_ACCESS_EXPIRY,
+  JWT_REFRESH_EXPIRY,
 };
