@@ -1,11 +1,10 @@
 import { Router } from 'express';
 import { authRouter } from './auth.routes';
+import { userRouter } from './user.routes';
 
 const router = Router();
 
-// Private Route
 router.use('/auth', authRouter);
-
-// Public Route
+router.use('/user', userRouter);
 
 export const clientRouter = router;

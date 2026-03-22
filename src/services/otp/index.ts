@@ -14,4 +14,4 @@ const getOtp = async (search = {}, projection: object = { __v: 0 }) =>
     },
   ]).then((result) => result[0] || null);
 
-export { createOtp, getOtp, updateOtp  };
+export { createOtp, getOtp, updateOtp };

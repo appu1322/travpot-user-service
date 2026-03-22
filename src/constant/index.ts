@@ -47,12 +47,16 @@ const OTP_TYPE = {
 };
 const OTP_STATUS = {
   pending: 'PENDING',
-  verified: 'VERIFIED'
-}
+  verified: 'VERIFIED',
+};
 const OTP_FOR = {
   user: 'USER',
-  admin: 'ADMIN'
-}
+  admin: 'ADMIN',
+};
+const SESSION_STATUS = {
+  active: 'ACTIVE',
+  revoked: 'REVOKED',
+};
 
 export {
   HOST,
@@ -65,7 +69,6 @@ export {
   MONGO_PASSWORD,
   MONGO_PORT,
   MONGO_USER,
-
   STATUS,
   AUTH_PROVIDER,
   LANGUAGE,
@@ -74,6 +77,7 @@ export {
   OTP_CHANNEL,
   OTP_STATUS,
   OTP_FOR,
+  SESSION_STATUS,
   JWT_ACCESS_SECRET,
   JWT_REFRESH_SECRET,
   JWT_ACCESS_EXPIRY,
