@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { OTP_FOR, OTP_STATUS, OTP_TYPE } from "../../constant";
+import { OTP_CHANNEL, OTP_FOR, OTP_STATUS, OTP_TYPE } from "../../constant";
 import { phoneSchema } from "../shared";
 
 const schema = new Schema({
@@ -13,6 +13,11 @@ const schema = new Schema({
     },
     otp: {
         type: Number
+    },
+    otpChannel: {
+        type: String,
+        enums: Object.values(OTP_CHANNEL),
+        default: OTP_CHANNEL.email,
     },
     otpType: {
         type: String,

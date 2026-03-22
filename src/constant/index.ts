@@ -30,6 +30,10 @@ const GENDER = {
   female: 'FEMALE',
   other: 'OTHER',
 };
+const OTP_CHANNEL = {
+  email: 'EMAIL',
+  mobile: 'MOBILE',
+};
 const OTP_TYPE = {
   forgotPassword: 'FORGOT-PASSWORD',
   login: 'LOGIN',
@@ -61,6 +65,7 @@ export {
   LANGUAGE,
   GENDER,
   OTP_TYPE,
+  OTP_CHANNEL,
   OTP_STATUS,
   OTP_FOR,
 };
