@@ -36,7 +36,7 @@ const OTP_CHANNEL = {
 };
 const OTP_TYPE = {
   forgotPassword: 'FORGOT-PASSWORD',
-  login: 'LOGIN',
+  signup: 'SIGNUP',
   updateContact: 'UPDATE-CONTACT',
 };
 const OTP_STATUS = {

@@ -22,7 +22,7 @@ const schema = new Schema({
     otpType: {
         type: String,
         enums: Object.values(OTP_TYPE),
-        default: OTP_TYPE.login,
+        default: OTP_TYPE.signup,
     },
     otpExpiryAt: {
         type: Date,
