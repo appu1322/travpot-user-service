@@ -9,12 +9,10 @@ import {
 const router = Router();
 
 router.post('/send-request', sendFriendRequestValidation, friendController.sendFriendRequestHandler);
-router.put('/', updateFriendRequestValidation, friendController.updateFriendRequestHandler);
-router.get('/list', friendController.friendListHandler);
-
-// Invitation routes
 router.post('/invite/by-email', sendByEmailValidation, friendController.sendByEmailHandler);
 router.post('/invite/generate-link', friendController.generateInviteLinkHandler);
-router.post('/invite/join/:token', friendController.joinByInviteLinkHandler);
+router.post('/invite/join', friendController.joinByInviteLinkHandler);
+router.put('/', updateFriendRequestValidation, friendController.updateFriendRequestHandler);
+router.get('/list', friendController.friendListHandler);
 
 export const friendRouter = router;

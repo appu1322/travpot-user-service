@@ -88,7 +88,7 @@ const generateInviteLinkHandler = async (req: IRequest, res: IResponse) => {
 
 const joinByInviteLinkHandler = async (req: IRequest, res: IResponse) => {
   const _recipient = req.user!._id;
-  const token = req.params['token'] as string;
+  const token = req.query['token'] as string;
 
   const invite = await getFriendByToken(token);
   if (!invite || invite.status !== FRIEND_STATUS.pending) {
