@@ -62,6 +62,11 @@ const FRIEND_STATUS = {
   accepted: 'ACCEPTED',
   rejected: 'REJECTED',
 };
+const INVITATION_METHOD = {
+  direct: 'DIRECT',
+  email: 'EMAIL',
+  link: 'LINK',
+};
 
 export {
   HOST,
@@ -84,6 +89,7 @@ export {
   OTP_FOR,
   SESSION_STATUS,
   FRIEND_STATUS,
+  INVITATION_METHOD,
   JWT_ACCESS_SECRET,
   JWT_REFRESH_SECRET,
   JWT_ACCESS_EXPIRY,

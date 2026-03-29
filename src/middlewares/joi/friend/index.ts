@@ -29,3 +29,16 @@ export const updateFriendRequestValidation = (req: Request, res: Response, next:
   }
   next();
 };
+
+export const sendByEmailValidation = (req: Request, res: Response, next: NextFunction) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+  });
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    makeResponse(req, res, 400, false, error.details.map((d) => d.message).join(', ') as any);
+    return;
+  }
+  next();
+};

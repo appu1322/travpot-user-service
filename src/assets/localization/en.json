@@ -25,5 +25,6 @@
   "friend_request_accepted": "Friend request accepted",
   "friend_request_rejected": "Friend request rejected",
   "friend_request_exit": "Friend request already exists",
-  "cannot_add_self": "You cannot send a friend request to yourself"
+  "cannot_add_self": "You cannot send a friend request to yourself",
+  "invite_link_generated": "Invitation link generated successfully"
 }
